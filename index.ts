@@ -15,6 +15,7 @@ app.use(rateLimit({
     max: 100,
 }))
 
+app.use('/')
 
 app.listen(3001, '0.0.0.0', () => {
     console.log('Listening on port http://localhost:3001')
