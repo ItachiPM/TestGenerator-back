@@ -1,5 +1,6 @@
 export interface TestQuestion {
     id?: string;
+    module: string;
     question: string;
     correctAnswer: string;
     badAnswer1: string | null;
@@ -8,7 +9,7 @@ export interface TestQuestion {
 }
 
 export interface QuestionResponse {
-    id?: string;
+    id: string;
     question: string;
     correctAnswer: Answer;
     badAnswer1: Answer | null;
@@ -16,7 +17,11 @@ export interface QuestionResponse {
     badAnswer3: Answer | null;
 }
 
-type Answer = {
+export type Answer = {
     answer: string;
-    point: number;
+    points: number;
+}
+
+export interface Module {
+    module: string
 }
