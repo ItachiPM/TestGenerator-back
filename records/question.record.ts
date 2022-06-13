@@ -1,9 +1,10 @@
 import {v4 as uuid} from "uuid";
-import {Module, TestQuestion} from "../types/testQuestion";
+import {Module, TestQuestion} from "../types";
 import {ValidationError} from "../utils/handleError";
 import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2";
 import {QuestionResponseRecord} from "./questionResponse.record";
+import {QuestionAndAnswerRecord} from "./questionAndAnswer.record";
 
 type QuestionRecordResponse = [TestQuestion[], FieldPacket[]]
 type ModuleEntity = [Module[], FieldPacket[]]
@@ -38,10 +39,13 @@ export class QuestionRecord implements TestQuestion {
         this.badAnswer3 = obj.badAnswer3;
     }
 
-    static async getAllModules() {
+    static async getAllModules(): Promise<Module[]> {
         const [results] = await pool.execute('SELECT * FROM `modules`') as ModuleEntity;
 
-        return results.map(el => el.module);
+        return results.map(el => ({
+            id: uuid(),
+            module: el.module,
+        }));
     }
 
     static async addModule(module: string) {
@@ -59,11 +63,11 @@ export class QuestionRecord implements TestQuestion {
 
         const moduleArray = await QuestionRecord.getAllModules();
 
-        if(!moduleArray.find(el => el === this.module)) {
+        if(!moduleArray.find(el => el.module === this.module)) {
             await QuestionRecord.addModule(this.module)
         }
 
-        await pool.execute('INSERT INTO `question` VALUES(:id, :question, :correctAnswer, :badAnswer1, :badAnswer2, :badAnswer3, :module)', {
+        await pool.execute('INSERT INTO `questions` VALUES(:id, :question, :correctAnswer, :badAnswer1, :badAnswer2, :badAnswer3, :module)', {
             id: this.id,
             question: this.question,
             correctAnswer: this.correctAnswer,
@@ -75,14 +79,14 @@ export class QuestionRecord implements TestQuestion {
     }
 
     static async delete(id: string) {
-        await pool.execute('DELETE FROM `question` WHERE `id` = :id', {
+        await pool.execute('DELETE FROM `questions` WHERE `id` = :id', {
             module,
             id,
         })
     }
 
-    static async getAllQuestionsFromModule(module: string) {
-        const [results] = await pool.execute('SELECT * FROM `question` WHERE `module` = :module', {
+    static async getAllQuestionsFromModule(module: string): Promise<QuestionResponseRecord[]> {
+        const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module', {
             module,
         }) as QuestionRecordResponse;
 
@@ -108,8 +112,32 @@ export class QuestionRecord implements TestQuestion {
         }))
     }
 
-    static async getAllQuestions() {
-        const [results] = await pool.execute('SELECT * FROM `question`') as QuestionRecordResponse;
+    static async getQuestionAndAnswer(): Promise<QuestionAndAnswerRecord[]> {
+        const [results] = await pool.execute('SELECT `question`, `correctAnswer`, `module`, `id` FROM `questions` ORDER BY `module`') as QuestionRecordResponse;
+
+        return results.length === 0 ? null : results.map(q => new QuestionAndAnswerRecord({
+            id: q.id,
+            module: q.module,
+            question: q.question,
+            answer: q.correctAnswer,
+        }));
+    }
+
+    static async getQuestionAndAnswerFromModule(module: string): Promise<QuestionAndAnswerRecord[]> {
+        const [results] = await pool.execute('SELECT `question`, `correctAnswer`, `module`, `id` FROM `questions` WHERE `module` = :module', {
+            module,
+        }) as QuestionRecordResponse;
+
+        return results.length === 0 ? null : results.map(q => new QuestionAndAnswerRecord({
+            id: q.id,
+            module: q.module,
+            question: q.question,
+            answer: q.correctAnswer,
+        }));
+    }
+
+    static async getAllQuestions(): Promise<QuestionResponseRecord[]> {
+        const [results] = await pool.execute('SELECT * FROM `questions`') as QuestionRecordResponse;
 
         return results.length === 0 ? null : results.map(question => new QuestionResponseRecord({
             id: question.id,

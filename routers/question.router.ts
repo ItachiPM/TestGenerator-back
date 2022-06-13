@@ -5,12 +5,11 @@ export const questionRouter = Router();
 
 questionRouter
     .get('/questions', async (req, res) => {
-        const allQuestion = await QuestionRecord.getAllQuestions();
+        const allQuestion = await QuestionRecord.getQuestionAndAnswer();
         res.json(allQuestion);
     })
     .get('/questions/:module', async (req, res) => {
-        console.log(req.params.module)
-        const allQuestion = await QuestionRecord.getAllQuestionsFromModule(req.params.module)
+        const allQuestion = await QuestionRecord.getQuestionAndAnswerFromModule(req.params.module)
         res.json(allQuestion);
     })
     .delete('/', async (req, res) => {

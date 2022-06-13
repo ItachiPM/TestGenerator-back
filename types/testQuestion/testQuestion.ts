@@ -23,5 +23,13 @@ export type Answer = {
 }
 
 export interface Module {
+    id: string;
     module: string
+}
+
+export interface ListQuestionEntity {
+    id: string;
+    module: string;
+    question: string;
+    answer: string;
 }
