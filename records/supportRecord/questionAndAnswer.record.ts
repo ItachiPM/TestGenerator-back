@@ -1,4 +1,4 @@
-import {ListQuestionEntity} from "../types";
+import {ListQuestionEntity} from "../../types";
 
 export class QuestionAndAnswerRecord implements ListQuestionEntity{
     id: string;

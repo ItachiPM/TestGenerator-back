@@ -1,15 +1,12 @@
 import {v4 as uuid} from "uuid";
-import {Module, TestQuestion} from "../types";
+import {Question, QuestionRecordResponse} from "../types";
 import {ValidationError} from "../utils/handleError";
 import {pool} from "../utils/db";
-import {FieldPacket} from "mysql2";
-import {QuestionResponseRecord} from "./questionResponse.record";
-import {QuestionAndAnswerRecord} from "./questionAndAnswer.record";
+import {QuestionAndAnswerRecord} from "./supportRecord/questionAndAnswer.record";
+import {ModuleRecord} from "./modules.record";
 
-type QuestionRecordResponse = [TestQuestion[], FieldPacket[]]
-type ModuleEntity = [Module[], FieldPacket[]]
 
-export class QuestionRecord implements TestQuestion {
+export class QuestionRecord implements Question {
     id?: string;
     module: string;
     question: string;
@@ -18,19 +15,19 @@ export class QuestionRecord implements TestQuestion {
     badAnswer2: string | null;
     badAnswer3: string | null;
 
-    constructor(obj: TestQuestion) {
+    constructor(obj: Question) {
         if(obj.question.length === 0) {
-            throw new ValidationError('Nie podana treść pytania.');
+            throw new ValidationError('Nie podano treści pytania.');
         }
         if(obj.correctAnswer.length === 0) {
-            throw new ValidationError('Brak poprawnej odpowiedzi.');
+            throw new ValidationError('Nie wprowadzono poprawnej odpowiedzi.');
         }
 
-        if(obj.module.length === 0) {
+        if(obj.module.length === 0 || obj.module === 'Wybierz') {
             throw new ValidationError('Brak przyporządkowania pytania do przedmiotu.')
         }
 
-        this.module = obj.module;
+        this.module = obj.module.charAt(0).toUpperCase() + obj.module.slice(1).toLowerCase();
         this.id = obj.id;
         this.question = obj.question;
         this.correctAnswer = obj.correctAnswer;
@@ -39,32 +36,19 @@ export class QuestionRecord implements TestQuestion {
         this.badAnswer3 = obj.badAnswer3;
     }
 
-    static async getAllModules(): Promise<Module[]> {
-        const [results] = await pool.execute('SELECT * FROM `modules`') as ModuleEntity;
-
-        return results.map(el => ({
-            id: uuid(),
-            module: el.module,
-        }));
-    }
-
-    static async addModule(module: string) {
-        await pool.execute('INSERT INTO `modules` (`module`)  VALUES(:module)', {
-            module
-        })
-    }
-
     async insert() {
+        let isNewModule = false
         if(!this.id) {
             this.id = uuid();
         } else {
             throw new Error('Cannot insert something that is already inserted.')
         }
 
-        const moduleArray = await QuestionRecord.getAllModules();
+        const moduleArray = await ModuleRecord.getAllModules();
 
         if(!moduleArray.find(el => el.module === this.module)) {
-            await QuestionRecord.addModule(this.module)
+            isNewModule = true
+            await ModuleRecord.addModule(this.module)
         }
 
         await pool.execute('INSERT INTO `questions` VALUES(:id, :question, :correctAnswer, :badAnswer1, :badAnswer2, :badAnswer3, :module)', {
@@ -76,6 +60,8 @@ export class QuestionRecord implements TestQuestion {
             badAnswer3: this.badAnswer3,
             module: this.module,
         })
+
+        return isNewModule
     }
 
     static async delete(id: string) {
@@ -83,33 +69,6 @@ export class QuestionRecord implements TestQuestion {
             module,
             id,
         })
-    }
-
-    static async getAllQuestionsFromModule(module: string): Promise<QuestionResponseRecord[]> {
-        const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module', {
-            module,
-        }) as QuestionRecordResponse;
-
-        return results.length === 0 ? null : results.map(question => new QuestionResponseRecord({
-            id: question.id,
-            question: question.question,
-            correctAnswer: {
-                answer: question.correctAnswer,
-                points: 1,
-            },
-            badAnswer1: {
-                answer: question.badAnswer1,
-                points: 0,
-            },
-            badAnswer2: {
-                answer: question.badAnswer2,
-                points: 0,
-            },
-            badAnswer3: {
-                answer: question.badAnswer3,
-                points: 0,
-            },
-        }))
     }
 
     static async getQuestionAndAnswer(): Promise<QuestionAndAnswerRecord[]> {
@@ -136,29 +95,5 @@ export class QuestionRecord implements TestQuestion {
         }));
     }
 
-    static async getAllQuestions(): Promise<QuestionResponseRecord[]> {
-        const [results] = await pool.execute('SELECT * FROM `questions`') as QuestionRecordResponse;
-
-        return results.length === 0 ? null : results.map(question => new QuestionResponseRecord({
-            id: question.id,
-            question: question.question,
-            correctAnswer: {
-                answer: question.correctAnswer,
-                points: 1,
-            },
-            badAnswer1: {
-                answer: question.badAnswer1,
-                points: 0,
-            },
-            badAnswer2: {
-                answer: question.badAnswer2,
-                points: 0,
-            },
-            badAnswer3: {
-                answer: question.badAnswer3,
-                points: 0,
-            },
-        }))
-    }
 
 }

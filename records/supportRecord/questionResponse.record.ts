@@ -1,6 +1,6 @@
-import {Answer, QuestionResponse} from "../types/testQuestion";
+import {Answer, TestQuestionsResponse} from "../../types";
 
-export class QuestionResponseRecord implements QuestionResponse {
+export class TestQuestionRecord implements TestQuestionsResponse {
     id: string;
     question: string;
     correctAnswer: Answer;
@@ -8,7 +8,7 @@ export class QuestionResponseRecord implements QuestionResponse {
     badAnswer2: Answer | null;
     badAnswer3: Answer | null;
 
-    constructor(obj: QuestionResponse) {
+    constructor(obj: TestQuestionsResponse) {
         this.id = obj.id;
         this.question = obj.question;
         this.correctAnswer = obj.correctAnswer;
