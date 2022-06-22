@@ -13,16 +13,12 @@ questionRouter
         res.json(questionFromModule);
     })
     .post('/add', async (req, res) =>{
-        console.log(req.body)
         const question = new QuestionRecord(req.body)
         const add = await question.insert()
         res.status(201).json({
             module: question.module,
             isNewModule: add,
         })
-    })
-    .delete('/', async (req, res) => {
-        await QuestionRecord.delete(req.body.id);
     })
 
 
