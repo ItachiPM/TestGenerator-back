@@ -1,7 +1,9 @@
 import {pool} from "../utils/db";
+import {v4 as uuid} from 'uuid'
 import {Module, QuestionRecordResponse, TestQuestionsResponse} from "../types";
 import {TestQuestionRecord} from "./supportRecord/questionResponse.record";
 import {ModuleRecord} from "./modules.record";
+import {shuffleAnswers} from "../utils/shuffleAnswers";
 
 export class TestRecord {
 
@@ -12,34 +14,77 @@ export class TestRecord {
 
         const questionsList: TestQuestionsResponse[] = [];
 
-        for(const module of modules) {
+        for (const module of modules) {
             const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module ORDER BY RAND() LIMIT 5', {
                 module: module.module
             }) as QuestionRecordResponse;
 
             results.map(question => new TestQuestionRecord({
-                    id: question.id,
-                    question: question.question,
-                    correctAnswer: {
+                id: question.id,
+                question: question.question,
+                answers: [
+                    {
+                        id: uuid(),
                         answer: question.correctAnswer,
                         points: 1,
                     },
-                    badAnswer1: {
+                    {
+                        id: uuid(),
                         answer: question.badAnswer1,
                         points: 0,
                     },
-                    badAnswer2: {
+                    {
+                        id: uuid(),
                         answer: question.badAnswer2,
                         points: 0,
                     },
-                    badAnswer3: {
+                    {
+                        id: uuid(),
                         answer: question.badAnswer3,
                         points: 0,
-                    },
-                }))
+                    }
+                ],
+            }))
                 .forEach(obj => questionsList.push(obj))
         }
 
+        questionsList.map(questions => shuffleAnswers(questions.answers))
+
         return questionsList
+    }
+
+    static async createModuleTest(module: string, questionsCount: number) {
+
+            const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module ORDER BY RAND() LIMIT :questionsCount', {
+                module,
+                questionsCount
+            }) as QuestionRecordResponse;
+
+            return results.length === 0 ? null : results.map(question => new TestQuestionRecord({
+                id: question.id,
+                question: question.question,
+                answers: [
+                    {
+                        id: uuid(),
+                        answer: question.correctAnswer,
+                        points: 1,
+                    },
+                    {
+                        id: uuid(),
+                        answer: question.badAnswer1,
+                        points: 0,
+                    },
+                    {
+                        id: uuid(),
+                        answer: question.badAnswer2,
+                        points: 0,
+                    },
+                    {
+                        id: uuid(),
+                        answer: question.badAnswer3,
+                        points: 0,
+                    }
+                ],
+            }))
     }
 }
