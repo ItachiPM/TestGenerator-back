@@ -3,6 +3,7 @@ import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2";
 import {Module} from "../types";
 
+
 type ModuleEntity = [Module[], FieldPacket[]]
 
 export class ModuleRecord implements Module {
