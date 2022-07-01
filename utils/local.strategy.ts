@@ -3,6 +3,7 @@ import {FieldPacket} from "mysql2";
 import passport from "passport";
 import {pool} from "./db";
 import {User} from "../types";
+import {hashPwd} from "./hash-pwd";
 
 export type UserResponse = [User[], FieldPacket[]]
 
@@ -16,10 +17,9 @@ export const localStrategy = new LocalStrategy({
     if (result.length === 0) {
         return done(null, false, {message: 'Nie znaleziono użytkownika'})
     }
-
     try {
-        if (pwdHash === result[0].pwdHash) {
-            return done(null, result[0])
+        if (hashPwd(pwdHash) === result[0].pwdHash) {
+            return done(null, true)
         } else {
             return done(null, false, {message: 'Nieprawidłowe hasło'})
         }
@@ -28,8 +28,8 @@ export const localStrategy = new LocalStrategy({
     }
 })
 
-passport.serializeUser((user: User, done) => {
-    return done(null, user)
+passport.serializeUser((isSuccess: boolean, done) => {
+    return done(null, isSuccess)
 })
 
 passport.deserializeUser((user: User, done) => {
