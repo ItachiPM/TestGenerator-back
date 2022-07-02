@@ -48,6 +48,7 @@ use file clonedb
 look to file sensitiveDataTemplate and create .env file base on it.
 
 npm install
+
 npm start
 
 
