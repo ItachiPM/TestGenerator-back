@@ -64,13 +64,6 @@ export class QuestionRecord implements Question {
         return isNewModule
     }
 
-    static async delete(id: string) {
-        await pool.execute('DELETE FROM `questions` WHERE `id` = :id', {
-            module,
-            id,
-        })
-    }
-
     static async getQuestionAndAnswer(): Promise<QuestionAndAnswerRecord[]> {
         const [results] = await pool.execute('SELECT `question`, `correctAnswer`, `module`, `id` FROM `questions` ORDER BY `module`') as QuestionRecordResponse;
 
