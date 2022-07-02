@@ -15,7 +15,7 @@ export class TestRecord {
         const questionsList: TestQuestionsResponse[] = [];
 
         for (const module of modules) {
-            const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module ORDER BY RAND() LIMIT 5', {
+            const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module AND `badAnswer1` IS NOT NUll ORDER BY RAND() LIMIT 5', {
                 module: module.module
             }) as QuestionRecordResponse;
 
@@ -55,7 +55,7 @@ export class TestRecord {
 
     static async createModuleTest(module: string, questionsCount: number) {
 
-            const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module ORDER BY RAND() LIMIT :questionsCount', {
+            const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module AND `badAnswer1` IS NOT NUll ORDER BY RAND() LIMIT :questionsCount', {
                 module,
                 questionsCount
             }) as QuestionRecordResponse;
