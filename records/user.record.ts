@@ -26,14 +26,16 @@ export class UserRecord implements User {
             login: this.login
         }) as UserResponse
 
-        if(result.length === 0) {
+        if(result.length !== 0) {
+            throw new ValidationError('Podana nazwa użytkownika jest juz zajęta')
+        } else {
             await pool.execute('INSERT INTO `users` VALUES(:id, :login, :pwdHash)', {
                 id: this.id,
                 login: this.login,
                 pwdHash: this.pwdHash,
             })
-        } else {
-            throw new ValidationError('Podana nazwa użytkownika jest juz zajęta')
+
+            return true
         }
     }
 

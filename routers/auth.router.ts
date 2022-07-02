@@ -28,5 +28,6 @@ authRouter
     .post('/register', async (req, res) => {
         const user = req.body
         const newUser = new UserRecord(user)
-        await newUser.register()
+        const isSuccess = await newUser.register()
+        res.json({isSuccess})
     })
