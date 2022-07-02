@@ -1,89 +1,65 @@
-# Test-Generaator API Backend
-> Outline a brief description of your project.
-> Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
+# Test Generator API Backend
+This project was create to help people to study. It is also good to make a simple quiz for fun.
 
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
 * [Features](#features)
-* [Screenshots](#screenshots)
 * [Setup](#setup)
 * [Usage](#usage)
-* [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
 * [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
-<!-- * [License](#license) -->
 
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
-<!-- You don't have to answer all the questions - just the ones relevant to your project. -->
+This project was create to help study to exam in school but it is also good to did simple quiz and have fun with friends.
+
+The purpose is fast and enjoyable study base on question and answer and solve test
+
+I did this because someone asked me to create app to study for exam.
+It is also a credit project in MegaK course.
 
 
 ## Technologies Used
-- Tech 1 - version 1.0
-- Tech 2 - version 2.0
-- Tech 3 - version 3.0
+- Typescript - version 4.7
+- Node JS - version 17.0
+- Express - version 4.18
+- Passport JS - version 0.6
+- Passport-local - version 1.0
+- Mysql2 - version 2.3
+- Cors - version 2.8
+- Jest
 
 
 ## Features
-List the ready features here:
-- Awesome feature 1
-- Awesome feature 2
-- Awesome feature 3
-
-
-## Screenshots
-
-<!-- If you have screenshots you'd like to share, include them here. -->
+- authorization and authentication user by passport JS
+- hashed a password of user
+- possibility to add new question by user. if questions have only correct answer they don't be use in quiz. Only questions with 2 or more answer cen by used in quiz
+- possibility to get all question and get all question from module
+- possibility to generate exam and exam from module with specific number of question
+- shuffle answer in questions exam
+- shared types with frontend
 
 
 ## Setup
-What are the project requirements/dependencies? Where are they listed? A requirements.txt or a Pipfile.lock file perhaps? Where is it located?
+create data base:
+use file clonedb
 
-Proceed to describe how to install / setup one's local environment / get started with the project.
+look to file sensitiveDataTemplate and create .env file base on it.
+
+#npm install
+# npm start
 
 
 ## Usage
-How does one go about using it?
-Provide various use cases and code examples here.
+This api is collaborate with TestGenerator-frontend API Link here:
+https://github.com/ItachiPM/TestGenerator-front
 
-`write-your-code-here`
-
-
-## Project Status
-Project is: _in progress_ / _complete_ / _no longer being worked on_. If you are no longer working on it, provide reasons why.
-
-
-## Room for Improvement
-Include areas you believe need improvement / could be improved. Also add TODOs for future development.
-
-Room for improvement:
-- Improvement to be done 1
-- Improvement to be done 2
-
-To do:
-- Feature to be added 1
-- Feature to be added 2
 
 
 ## Acknowledgements
-Give credit here.
-- This project was inspired by...
-
-- Many thanks to...
+This project was created on base knowledge gained on MegaK course.
 
 
 ## Contact
-
-
-
-<!-- Optional -->
-<!-- ## License -->
-<!-- This project is open source and available under the [... License](). -->
-
-<!-- You don't have to include all sections - just the one's relevant to your project -->
+#michal.pietraszek98@gmail.com
