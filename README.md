@@ -47,6 +47,8 @@ use file clonedb
 
 look to file sensitiveDataTemplate and create .env file base on it.
 
+I recommend open this app in http://localhost:3001 to be compatible with the frontend.
+
 npm install
 
 npm start
