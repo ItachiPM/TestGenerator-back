@@ -63,4 +63,4 @@ This project was created on base knowledge gained on MegaK course.
 
 
 ## Contact
-#michal.pietraszek98@gmail.com
+michal.pietraszek98@gmail.com
