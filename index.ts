@@ -1,4 +1,4 @@
-import express, {json} from "express";
+import express, {json, Router} from "express";
 import cors from 'cors';
 import 'express-async-errors';
 import session from "express-session";
@@ -38,10 +38,15 @@ app.use(passport.authenticate('session'));
 
 passport.use(localStrategy)
 
-app.use('/questions', questionRouter)
-app.use('/modules', modulesRouter)
-app.use('/test', testRouter)
-app.use('/login', authRouter)
+const router = Router();
+
+
+router.use('/questions', questionRouter)
+router.use('/modules', modulesRouter)
+router.use('/test', testRouter)
+router.use('/login', authRouter)
+
+app.use('/api')
 
 app.use(handleError)
 
