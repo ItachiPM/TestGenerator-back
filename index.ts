@@ -40,13 +40,12 @@ passport.use(localStrategy)
 
 const router = Router();
 
-
 router.use('/questions', questionRouter)
 router.use('/modules', modulesRouter)
 router.use('/test', testRouter)
 router.use('/login', authRouter)
 
-app.use('/api')
+app.use('/api', router)
 
 app.use(handleError)
 
