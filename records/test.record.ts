@@ -48,9 +48,7 @@ export class TestRecord {
                 .forEach(obj => questionsList.push(obj))
         }
 
-        questionsList.map(questions => shuffleAnswers(questions.answers))
-
-        return questionsList
+        return questionsList.map(questions => shuffleAnswers(questions.answers))
     }
 
     static async createModuleTest(module: string, questionsCount: number) {
