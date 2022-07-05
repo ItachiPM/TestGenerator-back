@@ -65,7 +65,7 @@ export class QuestionRecord implements Question {
     }
 
     static async getQuestionAndAnswer(): Promise<QuestionAndAnswerRecord[]> {
-        const [results] = await pool.execute('SELECT `question`, `correctAnswer`, `module`, `id` FROM `questions` ORDER BY `module`') as QuestionRecordResponse;
+        const [results] = await pool.execute('SELECT `question`, `correctAnswer`, `module`, `id` FROM `questions`') as QuestionRecordResponse;
 
         return results.length === 0 ? null : results.map(q => new QuestionAndAnswerRecord({
             id: q.id,
