@@ -55,36 +55,43 @@ export class TestRecord {
 
     static async createModuleTest(module: string, questionsCount: number) {
 
-            const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module AND `badAnswer1` IS NOT NUll ORDER BY RAND() LIMIT :questionsCount', {
-                module,
-                questionsCount
-            }) as QuestionRecordResponse;
+        const [results] = await pool.execute('SELECT * FROM `questions` WHERE `module` = :module AND `badAnswer1` IS NOT NUll ORDER BY RAND() LIMIT :questionsCount', {
+            module,
+            questionsCount
+        }) as QuestionRecordResponse;
 
-            return results.length === 0 ? null : results.map(question => new TestQuestionRecord({
-                id: question.id,
-                question: question.question,
-                answers: [
-                    {
-                        id: uuid(),
-                        answer: question.correctAnswer,
-                        points: 1,
-                    },
-                    {
-                        id: uuid(),
-                        answer: question.badAnswer1,
-                        points: 0,
-                    },
-                    {
-                        id: uuid(),
-                        answer: question.badAnswer2,
-                        points: 0,
-                    },
-                    {
-                        id: uuid(),
-                        answer: question.badAnswer3,
-                        points: 0,
-                    }
-                ],
-            }))
+        const questionsList: TestQuestionsResponse[] = [];
+
+        results.map(question => new TestQuestionRecord({
+            id: question.id,
+            question: question.question,
+            answers: [
+                {
+                    id: uuid(),
+                    answer: question.correctAnswer,
+                    points: 1,
+                },
+                {
+                    id: uuid(),
+                    answer: question.badAnswer1,
+                    points: 0,
+                },
+                {
+                    id: uuid(),
+                    answer: question.badAnswer2,
+                    points: 0,
+                },
+                {
+                    id: uuid(),
+                    answer: question.badAnswer3,
+                    points: 0,
+                }
+            ],
+        }))
+            .forEach(obj => questionsList.push(obj))
+
+        questionsList.map(questions => shuffleAnswers(questions.answers))
+
+        return questionsList
     }
 }
