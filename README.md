@@ -1,6 +1,8 @@
 # Test Generator API Backend
 This project was create to help people to study. It is also good to make a simple quiz for fun.
 
+this app is used in https://mpapi.networkmanager.pl/
+
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
@@ -47,7 +49,6 @@ use file database.sql
 
 create file configData.ts in folder ConfigData based on configDataTemplate.ts to configure database, session and cors data
 
-
 I recommend open this app in http://localhost:3001 to be compatible with the frontend.
 
 npm install
@@ -58,8 +59,6 @@ npm start
 ## Usage
 This api is collaborate with TestGenerator-frontend API Link here:
 https://github.com/ItachiPM/TestGenerator-front
-
-
 
 ## Acknowledgements
 This project was created on base knowledge gained on MegaK course.
