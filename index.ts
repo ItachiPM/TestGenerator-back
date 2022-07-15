@@ -10,17 +10,15 @@ import {testRouter} from "./routers/test.router";
 import {authRouter} from "./routers/auth.router";
 import {localStrategy} from "./utils/local.strategy";
 import {handleError} from "./utils/handleError";
-import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import {userRouter} from "./routers/user.router";
-
-dotenv.config({ path: __dirname+'/.env' });
+import {CORS_ORIGIN, SESSION_SECRET} from "./congifData/configData";
 
 const app = express()
 
 app.use(cookieParser())
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: CORS_ORIGIN,
     credentials: true,
 }));
 app.use(json());
@@ -29,7 +27,7 @@ app.use(rateLimit({
     max: 100,
 }))
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
 }))

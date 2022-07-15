@@ -43,9 +43,10 @@ It is also a credit project in MegaK course.
 
 ## Setup
 create data base:
-use file clonedb
+use file database.sql
 
-look to file sensitiveDataTemplate and create .env file base on it.
+create file configData.ts in folder ConfigData based on configDataTemplate.ts to configure database, session and cors data
+
 
 I recommend open this app in http://localhost:3001 to be compatible with the frontend.
 

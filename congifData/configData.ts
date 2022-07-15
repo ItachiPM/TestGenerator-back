@@ -1,0 +1,6 @@
+export const SESSION_SECRET = 'session secret'
+export const DB_HOST ='localhost'
+export const DB_USER = 'user'
+export const DB_PASSWORD = 'password'
+export const DB_DATABASE='database'
+export const CORS_ORIGIN='http://localhost:3000'
