@@ -12,6 +12,7 @@ import {localStrategy} from "./utils/local.strategy";
 import {handleError} from "./utils/handleError";
 import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import {userRouter} from "./routers/user.router";
 
 dotenv.config({ path: __dirname+'/.env' });
 
@@ -20,7 +21,7 @@ const app = express()
 app.use(cookieParser())
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
-    credentials: true
+    credentials: true,
 }));
 app.use(json());
 app.use(rateLimit({
@@ -43,7 +44,8 @@ const router = Router();
 router.use('/questions', questionRouter)
 router.use('/modules', modulesRouter)
 router.use('/test', testRouter)
-router.use('/login', authRouter)
+router.use('/auth', authRouter)
+router.use('/users', userRouter)
 
 app.use('/api', router)
 
