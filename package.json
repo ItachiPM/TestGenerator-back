@@ -6,7 +6,7 @@
   "scripts": {
     "start": "ts-node index.ts",
     "start-dev": "tsnd index.ts",
-    "build": "tsc",
+    "build": "tsc --scripts-prepend-node-path",
     "test": "jest"
   },
   "keywords": [],
