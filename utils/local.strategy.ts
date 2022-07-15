@@ -9,8 +9,8 @@ export type UserResponse = [User[], FieldPacket[]]
 
 export const localStrategy = new LocalStrategy({
     usernameField: 'login',
-    passwordField: 'pwdHash'
-}, async (login, pwdHash, done) => {
+    passwordField: 'password'
+}, async (login, password, done) => {
     const [result] = await pool.execute('SELECT * FROM `users` WHERE `login` = :login', {
         login
     }) as UserResponse
@@ -18,7 +18,7 @@ export const localStrategy = new LocalStrategy({
         return done(null, false, {message: 'Nie znaleziono użytkownika'})
     }
     try {
-        if (hashPwd(pwdHash) === result[0].pwdHash) {
+        if (hashPwd(password) === result[0].pwdHash) {
             return done(null, true)
         } else {
             return done(null, false, {message: 'Nieprawidłowe hasło'})

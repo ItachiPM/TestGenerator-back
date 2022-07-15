@@ -1,5 +1,5 @@
 import {v4 as uuid} from "uuid";
-import {Question, QuestionRecordResponse} from "../types";
+import {Question, QuestionForAdmin, QuestionForAdminRecordResponse, QuestionRecordResponse} from "../types";
 import {ValidationError} from "../utils/handleError";
 import {pool} from "../utils/db";
 import {QuestionAndAnswerRecord} from "./supportRecord/questionAndAnswer.record";
@@ -64,6 +64,24 @@ export class QuestionRecord implements Question {
         return isNewModule
     }
 
+    async update() {
+        await pool.execute('UPDATE `questions` SET `question` = :question, `correctAnswer` = :correctAnswer, `badAnswer1` = :badAnswer1, `badAnswer2` = :badAnswer2, `badAnswer3` = :badAnswer3, `module` = :module  WHERE `id` = :id', {
+            id: this.id,
+            question: this.question,
+            correctAnswer: this.correctAnswer,
+            badAnswer1: this.badAnswer1,
+            badAnswer2: this.badAnswer2,
+            badAnswer3: this.badAnswer3,
+            module: this.module,
+        })
+    }
+
+    async delete() {
+        await pool.execute('DELETE FROM `questions` WHERE `id` = :id', {
+            id: this.id,
+        })
+    }
+
     static async getQuestionAndAnswer(): Promise<QuestionAndAnswerRecord[]> {
         const [results] = await pool.execute('SELECT `question`, `correctAnswer`, `module`, `id` FROM `questions`') as QuestionRecordResponse;
 
@@ -86,6 +104,28 @@ export class QuestionRecord implements Question {
             question: q.question,
             answer: q.correctAnswer,
         }));
+    }
+
+    static async search(content: string): Promise<QuestionForAdmin[]> {
+        const [results] = await pool.execute('SELECT * FROM `questions` where `question` LIKE :content OR `correctAnswer` LIKE :content ', {
+            content: `%${content}%`,
+        }) as QuestionForAdminRecordResponse
+
+        return results
+    }
+
+    static async searchAll(): Promise<QuestionForAdmin[]> {
+        const [results] = await pool.execute('SELECT * FROM `questions`') as QuestionForAdminRecordResponse
+
+        return results
+    }
+
+    static async getOne(id: string): Promise<Question> {
+        const [results] = await pool.execute('SELECT * FROM `questions` WHERE `id` = :id', {
+            id,
+        }) as QuestionRecordResponse
+
+        return results.length === 0 ? null : new QuestionRecord(results[0])
     }
 
 

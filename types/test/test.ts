@@ -9,7 +9,3 @@ export type Answer = {
     answer: string;
     points: number;
 }
-
-export type TestResults = {
-
-}
