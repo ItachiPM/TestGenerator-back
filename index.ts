@@ -45,7 +45,7 @@ router.use('/test', testRouter)
 router.use('/auth', authRouter)
 router.use('/users', userRouter)
 
-app.use('/api', router)
+app.use('/app', router)
 
 app.use(handleError)
 
