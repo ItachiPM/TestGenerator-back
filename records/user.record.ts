@@ -1,18 +1,15 @@
-import {RegisterUser, User} from "../types";
+import {RequestUser, User, UserForAdminResponse, UserResponse, UserResponseForAdmin} from "../types";
 import {hashPwd} from "../utils/hash-pwd";
 import {pool} from "../utils/db";
-import {FieldPacket} from "mysql2";
 import {ValidationError} from "../utils/handleError";
 import {v4 as uuid } from 'uuid'
-
-type UserResponse = [User[], FieldPacket[]]
 
 export class UserRecord implements User {
     id?: string;
     login: string;
     pwdHash: string;
 
-    constructor(obj: RegisterUser) {
+    constructor(obj: RequestUser) {
         this.login = obj.login
         this.pwdHash = hashPwd(obj.password)
     }
@@ -39,4 +36,31 @@ export class UserRecord implements User {
         }
     }
 
+    static async getOne(id: string): Promise<User> {
+        const [results] = await pool.execute('SELECT * FROM `users` WHERE `id` = :id', {
+            id,
+        }) as UserResponse
+
+        return results.length === 0 ? null : results[0];
+    }
+
+    static async search(content: string): Promise<UserResponseForAdmin[]> {
+        const [results] = await pool.execute('SELECT `id`, `login` FROM `users` WHERE `login` LIKE :content', {
+            content: `%${content}%`,
+        }) as UserForAdminResponse
+
+        return results
+    }
+
+    static async searchAll(): Promise<UserResponseForAdmin[]> {
+        const [results] = await pool.execute('SELECT `id`, `login` FROM `users`') as UserForAdminResponse
+
+        return results
+    }
+
+    static async delete(id: string) {
+        await pool.execute('DELETE FROM `users` WHERE `id` = :id', {
+            id
+        })
+    }
 }
