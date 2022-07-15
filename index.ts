@@ -12,7 +12,7 @@ import {localStrategy} from "./utils/local.strategy";
 import {handleError} from "./utils/handleError";
 import cookieParser from "cookie-parser";
 import {userRouter} from "./routers/user.router";
-import {config} from "./congifData/configData";
+import {config} from "./configData/configData";
 
 const app = express()
 
