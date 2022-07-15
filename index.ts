@@ -12,13 +12,13 @@ import {localStrategy} from "./utils/local.strategy";
 import {handleError} from "./utils/handleError";
 import cookieParser from "cookie-parser";
 import {userRouter} from "./routers/user.router";
-import {CORS_ORIGIN, SESSION_SECRET} from "./congifData/configData";
+import {config} from "./congifData/configData";
 
 const app = express()
 
 app.use(cookieParser())
 app.use(cors({
-    origin: CORS_ORIGIN,
+    origin: config.CORS_ORIGIN,
     credentials: true,
 }));
 app.use(json());
@@ -27,7 +27,7 @@ app.use(rateLimit({
     max: 100,
 }))
 app.use(session({
-    secret: SESSION_SECRET,
+    secret: config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
 }))
