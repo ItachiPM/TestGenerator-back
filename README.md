@@ -9,6 +9,7 @@ this app is used in https://mpapi.networkmanager.pl/
 * [Features](#features)
 * [Setup](#setup)
 * [Usage](#usage)
+* [Api](#api-request)
 * [Acknowledgements](#acknowledgements)
 * [Contact](#contact)
 
@@ -59,6 +60,35 @@ npm start
 ## Usage
 This api is collaborate with TestGenerator-frontend API Link here:
 https://github.com/ItachiPM/TestGenerator-front
+
+## Api Request 
+
+- Login
+![tekst alternatywny](images/login.PNG)
+- Logout
+  ![tekst alternatywny](images/logout.PNG)
+- Register
+  ![tekst alternatywny](images/register.PNG)
+- Delete user
+  ![tekst alternatywny](images/delete-user.PNG)
+- Search user
+  ![tekst alternatywny](images/search-users.PNG)
+- Test generate
+  ![tekst alternatywny](images/generate-test.PNG)
+- Modules
+  ![tekst alternatywny](images/modules.PNG)
+- Question
+  ![tekst alternatywny](images/one-question.PNG)
+- Question By module
+  ![tekst alternatywny](images/question-by-module.PNG)
+- Questions
+  ![tekst alternatywny](images/questions.PNG)
+- Question to Admin panel
+  ![tekst alternatywny](images/question-to-preview-for-admin.PNG)
+- Add question
+  ![tekst alternatywny](images/add-question.PNG)
+- Delete question
+  ![tekst alternatywny](images/delete-question.PNG)
 
 ## Acknowledgements
 This project was created on base knowledge gained on MegaK course.
